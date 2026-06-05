@@ -3,13 +3,14 @@
 #include <fstream>
 #include <locale>
 #include <cstdlib>
+#include <vector>
 #include "tree.h"
 
 namespace {
 
 void DfsPerms(PMTree::Node* node,
               std::vector<char>& current,
-              std::vector<std::vector<char>>* result) {
+              std::vector<std::vector<char>>& result) {
   if (node == nullptr) {
     return;
   }
@@ -19,7 +20,7 @@ void DfsPerms(PMTree::Node* node,
   }
 
   if (node->children.empty()) {
-    result->push_back(current);
+    result.push_back(current);
   } else {
     for (PMTree::Node* child : node->children) {
       DfsPerms(child, current, result);
@@ -31,8 +32,8 @@ void DfsPerms(PMTree::Node* node,
   }
 }
 
-long long Factorial(int n) {
-  long long result = 1;
+int64_t Factorial(int n) {
+  int64_t result = 1;
 
   for (int i = 2; i <= n; ++i) {
     result *= i;
@@ -47,7 +48,7 @@ std::vector<std::vector<char>> getAllPerms(PMTree& tree) {
   std::vector<std::vector<char>> result;
   std::vector<char> current;
 
-  DfsPerms(tree.root(), current, &result);
+  DfsPerms(tree.root(), current, result);
 
   return result;
 }
@@ -74,8 +75,8 @@ std::vector<char> getPerm2(PMTree& tree, int num) {
   std::vector<char> result;
   PMTree::Node* node = tree.root();
 
-  for (int level = 0; level < n; ++level) {
-    long long block = Factorial(n - level - 1);
+  for (int i = 0; i < n; ++i) {
+    int64_t block = Factorial(n - i - 1);
 
     int index = static_cast<int>(num / block);
 
